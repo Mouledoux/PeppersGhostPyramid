@@ -53,16 +53,15 @@ public class Hologram : MonoBehaviour
 		{
 			cameras [1].transform.eulerAngles = new Vector3 (0, 0, 0);
 			cameras [2].transform.eulerAngles = new Vector3 (0, 180, 180);
-			cameras [3].transform.eulerAngles = new Vector3 (0, 90, 90);
-			cameras [4].transform.eulerAngles = new Vector3 (0, 270, 270);
 		}
 		else if (type == Direction.bottomUp) 
 		{
 			cameras [1].transform.eulerAngles = new Vector3 (0, 0, 180);
 			cameras [2].transform.eulerAngles = new Vector3 (0, 180, 0);
-			cameras [3].transform.eulerAngles = new Vector3 (0, 90, 90);
-			cameras [4].transform.eulerAngles = new Vector3 (0, 270, 270);
 		}
+
+		cameras [3].transform.eulerAngles = new Vector3 (0, 90, 90);    // Since these values never differ
+		cameras [4].transform.eulerAngles = new Vector3 (0, 270, 270);  // they can be set outside the if/ else
 	}
 
 	void CameraRect(Vector2 res)
@@ -86,21 +85,19 @@ public class Hologram : MonoBehaviour
 			cameraCenterY = cameraCenterY / aspectRatio;
 		}
 
-		if (type == Direction.topDown) 
+        // Because cameras 0, 1, 2 dont change, they can be set pre check.
+        cameras[0].GetComponent<Camera>().farClipPlane = 0.02f;
+        cameras[0].GetComponent<Camera>().nearClipPlane = 0.01f;
+        cameras[1].GetComponent<Camera>().rect = new Rect(1 / 2f - cameraCenterX, 1 / 2f - (3 * cameraCenterY), cameraSizeX, cameraSizeY);
+        cameras[2].GetComponent<Camera>().rect = new Rect(1 / 2f - cameraCenterX, 1 / 2f + cameraCenterY, cameraSizeX, cameraSizeY);
+
+        if (type == Direction.topDown) 
 		{
-			cameras [0].GetComponent<Camera> ().farClipPlane = 0.02f;
-			cameras [0].GetComponent<Camera> ().nearClipPlane = 0.01f;
-			cameras [1].GetComponent<Camera> ().rect = new Rect (1 / 2f - cameraCenterX, 1 / 2f - (3 * cameraCenterY), cameraSizeX, cameraSizeY);
-			cameras [2].GetComponent<Camera> ().rect = new Rect (1 / 2f - cameraCenterX, 1 / 2f + cameraCenterY, cameraSizeX, cameraSizeY);
 			cameras [3].GetComponent<Camera> ().rect = new Rect (1 / 2f - (3 * cameraCenterX), 1 / 2f - cameraCenterY, cameraSizeX, cameraSizeY);
 			cameras [4].GetComponent<Camera> ().rect = new Rect (1 / 2f + cameraCenterX, 1 / 2f - cameraCenterY, cameraSizeX, cameraSizeY); 
 		} 
 		else if (type == Direction.bottomUp) 
 		{
-			cameras [0].GetComponent<Camera> ().farClipPlane = 0.02f;
-			cameras [0].GetComponent<Camera> ().nearClipPlane = 0.01f;
-			cameras [1].GetComponent<Camera> ().rect = new Rect (1 / 2f - cameraCenterX, 1 / 2f - (3 * cameraCenterY), cameraSizeX, cameraSizeY);
-			cameras [2].GetComponent<Camera> ().rect = new Rect (1 / 2f - cameraCenterX, 1 / 2f + cameraCenterY, cameraSizeX, cameraSizeY);
 			cameras [3].GetComponent<Camera> ().rect = new Rect (1 / 2f + cameraCenterX, 1 / 2f - cameraCenterY, cameraSizeX, cameraSizeY);
 			cameras [4].GetComponent<Camera> ().rect = new Rect (1 / 2f - (3 * cameraCenterX), 1 / 2f - cameraCenterY, cameraSizeX , cameraSizeY); 	 
 		}
